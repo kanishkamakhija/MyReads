@@ -20,12 +20,11 @@ class BookShelf extends React.Component {
         <p>Loading</p>
       )
     }
-    // console.log(this.props.books[0].imageLinks.smallThumbnail);
     const allBooks = this.props.books;
     const currentlyReadingBooks = allBooks.filter((book) => (book.shelf === "currentlyReading"));
     const wantToReadBooks = allBooks.filter((book) => (book.shelf === "wantToRead"));
     const readBooks = allBooks.filter((book) => (book.shelf === "read"));
-    // console.log(currentlyReadingBooks, wantToReadBooks, readBooks);
+    
     return (
       <div className="list-books">
         <div className="list-books-title">

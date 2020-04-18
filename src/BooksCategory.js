@@ -3,19 +3,17 @@
 //currently Reading
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './App.css';
 
 class BooksCategory extends React.Component {
 
-    handleBookState = (event) => {
-        console.log(event.target.value);
-
+    handleBookState = () => {
+        // const shelf = event.target.value;
+        // this.props.updateBookShelf(book, shelf);
     }
     
     render() {
-        const books = this.props.books
         return (
             <div className="bookshelf-books">
                 <ol className="books-grid">
@@ -26,17 +24,17 @@ class BooksCategory extends React.Component {
                                     <div className="book-top">
                                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})`  }}></div>
                                         <div className="book-shelf-changer">
-                                            <select>
+                                            <select onChange={this.handleBookState()}>
                                                 <option value="move" disabled>Move to...</option>
-                                                <option value="currentlyReading" onClick={this.handleBookState}>Currently Reading</option>
-                                                <option value="wantToRead" onClick={this.handleBookState}>Want to Read</option>
-                                                <option value="read" onClick={this.handleBookState}>Read</option>
-                                                <option value="none" onClick={this.handleBookState}>None</option>
+                                                <option value="currentlyReading">Currently Reading</option>
+                                                <option value="wantToRead">Want to Read</option>
+                                                <option value="read">Read</option>
+                                                <option value="none">None</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div className="book-title">{book.title}</div>
-                                    <div className="book-authors">{book.authors.toString()}</div>
+                                    <div className="book-authors">{book.authors}</div>
                                 </div>
                             </li>
                         ))
