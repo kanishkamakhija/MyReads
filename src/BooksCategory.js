@@ -14,15 +14,20 @@ class BooksCategory extends React.Component {
     }
     
     render() {
+
+        if(!this.props.bookList) {
+            return(<p>No Match Found</p>)
+        }
+        
         return (
             <div className="bookshelf-books">
                 <ol className="books-grid">
-                    {
-                        this.props.bookList.map((book) => (
+                    {   
+                        this.props.bookList.length >0 && this.props.bookList.map((book) => (
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
-                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})`  }}></div>
+                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.smallThumbnail})`  }}></div>
                                         <div className="book-shelf-changer">
                                             <select onChange={this.handleBookState()}>
                                                 <option value="move" disabled>Move to...</option>
@@ -31,6 +36,12 @@ class BooksCategory extends React.Component {
                                                 <option value="read">Read</option>
                                                 <option value="none">None</option>
                                             </select>
+                                            {/* <BookShelfChanger
+                      shelf={book.shelf ? book.shelf : 'none'}
+                      onChangeShelf={(newShelf) => {
+                        this.handleChange(book, newShelf)
+                      }}
+                    ></BookShelfChanger> */}
                                         </div>
                                     </div>
                                     <div className="book-title">{book.title}</div>
