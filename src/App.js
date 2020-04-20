@@ -15,30 +15,51 @@ import * as BooksAPI from './BooksAPI';
     // showSearchPage: false
 class App extends React.Component {
   state = {
-    books : []
+    books : [],
+    currentlyReading: [],
+    wantToRead: [],
+    read: []
   }
 
-  componentDidMount()  {
-    BooksAPI.getAll()
-      .then((books) => { 
-        this.setState(() => ({ books : books}) )
-      })
-      
+  componentDidMount()  {  
+  const promise =  BooksAPI.getAll();
+  promise.then((books) => { 
+    this.setState(() => ({ books: books }) )
+  })
+  promise.then((books) => {
+    const currentlyReadingBooks = books.filter((book) => (book.shelf === "currentlyReading"));
+    const wantToReadBooks = books.filter((book) => (book.shelf === "wantToRead"));
+    const readBooks = books.filter((book) => (book.shelf === "read"));
+    this.setState({currentlyReading: currentlyReadingBooks, 
+                  wantToRead: wantToReadBooks, 
+                  read: readBooks});
+  })
+  }
+
+  updateState = (res) => {
+    this.setState({currentlyReading: res.currentlyReading, 
+      wantToRead : res.wantToRead, 
+      read: res.read});
   }
 
   updateBookShelf = (book, shelf) => {
-    BooksAPI.update(book, shelf)
-      .then((res) => {console.log(res)})
+    const promise = BooksAPI.update(book, shelf);
+    promise.then((data) => 
+    this.updateState(data));
   }
 
+
+
   render() {
+    const allBooks = this.state.books;
+    
     return (
       <div className="app">
         <Route path='/search'  render={() => (
           <BookSearch books={this.state.books} updateBookShelf={this.updateBookShelf}/>
           )}/>
         <Route exact path='/' render={() => (
-          <BookShelf books={this.state.books}/>
+          <BookShelf books={this.state} updateBookShelf={this.updateBookShelf} />
           )}/>
       </div>
     )

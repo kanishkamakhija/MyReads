@@ -8,11 +8,11 @@ import './App.css';
 
 class BooksCategory extends React.Component {
 
-    handleBookState = () => {
-        // const shelf = event.target.value;
-        // this.props.updateBookShelf(book, shelf);
+    handleBookState = (event, book) => {
+        const shelf = event.target.value;
+        this.setState({shelf: shelf});
+        this.props.updateBookShelf(book, shelf);
     }
-    
     render() {
 
         if(!this.props.bookList) {
@@ -29,12 +29,12 @@ class BooksCategory extends React.Component {
                                     <div className="book-top">
                                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.smallThumbnail})`  }}></div>
                                         <div className="book-shelf-changer">
-                                            <select onChange={this.handleBookState()}>
-                                                <option value="move" disabled>Move to...</option>
-                                                <option value="currentlyReading">Currently Reading</option>
-                                                <option value="wantToRead">Want to Read</option>
-                                                <option value="read">Read</option>
-                                                <option value="none">None</option>
+                                            <select value={book.shelf ? book.shelf : 'none'} onChange={(event) => this.handleBookState(event, book)}>
+                                                <option key="move" value="move" disabled>Move to...</option>
+                                                <option key="currentlyReading" value="currentlyReading">Currently Reading</option>
+                                                <option key="wantToRead" value="wantToRead">Want to Read</option>
+                                                <option key="read" value="read">Read</option>
+                                                <option key="none" value="none">None</option>
                                             </select>
                                             {/* <BookShelfChanger
                       shelf={book.shelf ? book.shelf : 'none'}
@@ -48,7 +48,7 @@ class BooksCategory extends React.Component {
                                     <div className="book-authors">{book.authors}</div>
                                 </div>
                             </li>
-                        ))
+                        ), this)
                     }
                 </ol>
             </div>

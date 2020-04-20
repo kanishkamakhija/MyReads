@@ -57,7 +57,6 @@ class BookSearch extends React.Component {
         }
     }
     render() {
-        // console.log(this.state.filteredBooks)
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -71,11 +70,10 @@ class BookSearch extends React.Component {
                     <div className="list-books-content">
                         <div>
                             <div className="bookshelf">
-                                <BooksCategory bookList={this.state.filteredBooks} /> 
+                                <BooksCategory bookList={this.state.filteredBooks} updateBookShelf={this.props.updateBookShelf} /> 
                             </div>
                         </div>
                     </div>
-                    {/* <ol className="books-grid"></ol> */}
                 </div>
             </div>
         )

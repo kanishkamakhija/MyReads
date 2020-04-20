@@ -8,23 +8,20 @@ import BooksCategory from './BooksCategory';
 
 class BookShelf extends React.Component {
 
-//   static propTypes = {
-//     prop name : PropTypes.array.isRequired,
-//     prop name : PropTypes.func.isRequired
-    
-// }
+  //   static propTypes = {
+  //     prop name : PropTypes.array.isRequired,
+  //     prop name : PropTypes.func.isRequired
 
+  // }
+
+  
   render() {
-    if(!this.props.books.length) {
-      return(
+    if (!this.props.books.books.length) {
+      return (
         <p>Loading</p>
       )
     }
-    const allBooks = this.props.books;
-    const currentlyReadingBooks = allBooks.filter((book) => (book.shelf === "currentlyReading"));
-    const wantToReadBooks = allBooks.filter((book) => (book.shelf === "wantToRead"));
-    const readBooks = allBooks.filter((book) => (book.shelf === "read"));
-    
+    const { currentlyReading, wantToRead, read } = this.props.books;
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -34,15 +31,15 @@ class BookShelf extends React.Component {
           <div>
             <div className="bookshelf">
               <h2 className="bookshelf-title">Currently Reading</h2>
-              <BooksCategory bookList={currentlyReadingBooks}/>
+              <BooksCategory key="currentlyReading" bookList={currentlyReading} updateBookShelf={this.props.updateBookShelf} />
             </div>
             <div className="bookshelf">
               <h2 className="bookshelf-title">Want to Read</h2>
-              <BooksCategory bookList={wantToReadBooks}/>
+              <BooksCategory key="wantToRead" bookList={wantToRead} updateBookShelf={this.props.updateBookShelf} />
             </div>
             <div className="bookshelf">
               <h2 className="bookshelf-title">Read</h2>
-              <BooksCategory bookList={readBooks}/>
+              <BooksCategory key="read" bookList={read} updateBookShelf={this.props.updateBookShelf} />
             </div>
           </div>
         </div>
