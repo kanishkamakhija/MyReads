@@ -62,7 +62,6 @@ class BookSearch extends React.Component {
                 <div className="search-books-bar">
                     <Link to='/' className="close-search">Close</Link>
                     <div className="search-books-input-wrapper">
-
                         <input type="text" placeholder="Search by title or author" value={this.state.query} onChange={this.handleChange} />
                     </div>
                 </div>

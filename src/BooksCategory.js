@@ -27,14 +27,14 @@ class BooksCategory extends React.Component {
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
-                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.smallThumbnail})`  }}></div>
+                                        <div className="book-cover" key={book.id} style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.smallThumbnail})`  }}></div>
                                         <div className="book-shelf-changer">
                                             <select value={book.shelf ? book.shelf : 'none'} onChange={(event) => this.handleBookState(event, book)}>
-                                                <option key="move" value="move" disabled>Move to...</option>
-                                                <option key="currentlyReading" value="currentlyReading">Currently Reading</option>
-                                                <option key="wantToRead" value="wantToRead">Want to Read</option>
-                                                <option key="read" value="read">Read</option>
-                                                <option key="none" value="none">None</option>
+                                                <option value="move" disabled>Move to...</option>
+                                                <option value="currentlyReading">Currently Reading</option>
+                                                <option value="wantToRead">Want to Read</option>
+                                                <option value="read">Read</option>
+                                                <option value="none">None</option>
                                             </select>
                                             {/* <BookShelfChanger
                       shelf={book.shelf ? book.shelf : 'none'}
