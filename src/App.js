@@ -1,68 +1,78 @@
-import React from 'react'
-// import * as BooksAPI from './BooksAPI'
-import { Route } from 'react-router-dom';
-import BookSearch from './BookSearch';
-import BookShelf from './BookShelf';
-import * as BooksAPI from './BooksAPI';
+/* eslint-disable no-mixed-spaces-and-tabs */
+import React from "react"
+import { Route } from "react-router-dom"
+import BookSearch from "./BookSearch"
+import BookShelf from "./BookShelf"
+import * as BooksAPI from "./BooksAPI"
 
-
-/**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    // showSearchPage: false
 class App extends React.Component {
-  state = {
-    books : [],
-    currentlyReading: [],
-    wantToRead: [],
-    read: []
+  constructor(props) {
+    super(props)
+    this.state = {
+      books: [],
+      currentlyReading: [],
+      wantToRead: [],
+      read: [],
+      loading: true,
+	  }
   }
 
   componentDidMount()  {  
-  const promise =  BooksAPI.getAll();
-  promise.then((books) => { 
-    this.setState(() => ({ books: books }) )
-  })
-  promise.then((books) => {
-    const currentlyReadingBooks = books.filter((book) => (book.shelf === "currentlyReading"));
-    const wantToReadBooks = books.filter((book) => (book.shelf === "wantToRead"));
-    const readBooks = books.filter((book) => (book.shelf === "read"));
-    this.setState({currentlyReading: currentlyReadingBooks, 
-                  wantToRead: wantToReadBooks, 
-                  read: readBooks});
-  })
+  	BooksAPI.getAll()
+  		.then((books) => {
+        const currentlyReading = books.filter((book) => (book.shelf === "currentlyReading"))
+        const wantToRead = books.filter((book) => (book.shelf === "wantToRead"))
+        const read = books.filter((book) => (book.shelf === "read"))
+        this.setState({
+          currentlyReading, 
+          wantToRead, 
+          read,
+          books,
+          loading: false
+        })
+      })
   }
 
   updateState = (res) => {
-    this.setState({currentlyReading: res.currentlyReading, 
-      wantToRead : res.wantToRead, 
-      read: res.read});
+    const books = this.state.books
+  	this.setState({
+      currentlyReading: books.filter((book) => (res.currentlyReading.includes(book.id))),
+  		wantToRead : books.filter((book) => (res.wantToRead.includes(book.id))), 
+  		read: books.filter((book) => (res.read.includes(book.id))),
+  	})
   }
 
   updateBookShelf = (book, shelf) => {
-    const promise = BooksAPI.update(book, shelf);
-    promise.then((data) => 
-    this.updateState(data));
+    this.setState(({books: prevBooks}) => {
+      const match = prevBooks.filter((prevBook) => (prevBook.id === book.id))
+      if (!match.length) {
+        return {
+          books: [...prevBooks, book]
+        }
+      }
+    }, () => {
+      BooksAPI.update(book, shelf)
+        .then((data) => this.updateState(data))
+    })
   }
 
-
-
   render() {
-    const allBooks = this.state.books;
-    
-    return (
-      <div className="app">
-        <Route path='/search'  render={() => (
-          <BookSearch books={this.state.books} updateBookShelf={this.updateBookShelf}/>
-          )}/>
-        <Route exact path='/' render={() => (
-          <BookShelf books={this.state} updateBookShelf={this.updateBookShelf} />
-          )}/>
-      </div>
-    )
+  	return (
+  		<div className="app">
+  			<Route path='/search'  render={() => (
+  				<BookSearch books={this.state.books} updateBookShelf={this.updateBookShelf}/>
+  			)}/>
+  			<Route exact path='/' render={() => (
+          <BookShelf
+            books={this.state.books} 
+  					currentlyReading={this.state.currentlyReading} 
+  					wantToRead={this.state.wantToRead}
+  					read={this.state.read}
+  					updateBookShelf={this.updateBookShelf} 
+  					loading={this.state.loading}/>
+  			)}/>
+  		</div>
+  	)
   }
 }
 
